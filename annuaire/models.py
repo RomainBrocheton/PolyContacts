@@ -1,23 +1,42 @@
 from flask_sqlalchemy import SQLAlchemy
 import logging as lg
+import enum
 
 from .views import app
 # Create database connection object
 db = SQLAlchemy(app)
 
-class Content(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(200), nullable=False)
-    gender = db.Column(db.Integer(), nullable=False)
+class Role(enum.Enum):
+    guest = 0
+    user = 1
+    admin = 2
 
-    def __init__(self, description, gender):
-        self.description = description
-        self.gender = gender
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(200), nullable=False)
+    lastname = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(200), nullable=False, unique=True)
+    password = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(200), nullable=True)
+    picture = db.Column(db.Text(65000), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+
+    role = db.Column(db.Enum(Role), nullable=False, default=Role['user'])
+
+    def __init__(self, firstname, lastname, email, password, role = Role['user']):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.email = email
+        self.password = password
+        self.role = role
 
 def init_db():
     db.drop_all()
     db.create_all()
-    db.session.add(Content("THIS IS SPARTAAAAAAA!!!", 1))
-    db.session.add(Content("What's your favorite scary movie?", 0))
+
+    # Seeding
+    db.session.add(User("Admin", "Admin", "admin@admin", "password", Role['admin']))
+    db.session.add(User("John", "Doe", "john.doe@example.com", "password"))
     db.session.commit()
-    lg.warning('Database initialized!')
+
+    lg.info('Database initialized!')

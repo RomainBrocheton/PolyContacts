@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+
+
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <h2>Inscription</h2>
+
+        <form action="/inscription" method="POST" class="row g-2 mb-4">
+            <div class="col-md-6 col-xs-12">
+                <label for="firstname">Prénom :</label>
+                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="John">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="lastname">Nom :</label>
+                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Doe">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="email">Adresse email :</label>
+                <input type="email" class="form-control"  name="email" id="email" placeholder="name@example.com">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="password">Mot de passe :</label>
+                <input type="password" class="form-control"  name="password" id="password" placeholder="Password">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Inscription</button>
+            </div>
+        </form>
+
+        <p>Vous avez déjà un compte ? <a href="/connexion">Connectez-vous !</a></p>
+    </div>
+</div>
+
+
+{% endblock %}

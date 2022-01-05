@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <h2>Connexion</h2>
+
+        <form action="/inscription" method="POST" class="row g-2 mb-4">
+            <div class="col-md-6 col-xs-12">
+                <label for="email">Adresse email :</label>
+                <input type="email" class="form-control"  name="email" id="email" placeholder="name@example.com">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="password">Mot de passe :</label>
+                <input type="password" class="form-control"  name="password" id="password" placeholder="Password">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Connexion</button>
+            </div>
+        </form>
+
+        <p>Vous avez oubliez votre mot de passe ? <a href="#">Cliquez-ici</a></p>
+        <p>Vous n'avez pas encore de compte ? <a href="/inscription">Inscrivez-vous !</a></p>
+    </div>
+</div>
+{% endblock %}
