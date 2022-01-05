@@ -56,7 +56,24 @@ def dashboard():
     if auth == 0:
         return redirect("../connexion/")
 
-    return render_template('app.html',auth=auth)
+    users = User.query.all()
+    return render_template('app.html', auth=auth, users = users)
+
+@app.route('/search')
+def search():
+    global auth
+    if auth == 0:
+        return redirect("../connexion/")
+
+    users1 = User.query.filter(User.email == request.args.get('email')).all()
+    users2 = User.query.filter(User.firstname == request.args.get('firstname')).all()
+    users3 = User.query.filter(User.lastname == request.args.get('lastname')).all()
+    users4 = User.query.filter(User.phone == request.args.get('phone')).all()
+
+    users = users1 + users2 + users3 + users4
+    users = list(dict.fromkeys(users))
+    return render_template('app.html', auth=auth, users = users, email = request.args.get('email'), firstname = request.args.get('firstname'), lastname = request.args.get('lastname'), phone = request.args.get('phone') )
+
 
 if __name__ == "__main__":
     app.run()

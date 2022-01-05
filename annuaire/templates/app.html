@@ -2,8 +2,63 @@
 
 {% block content %} 
 
+<div class="row">
+    <div class="col-md-4 col-xs-12">
+        <h2>Rechercher</h2>
 
-buoizpaker
+        <p>Remplissez les champs sur lesquels votre recherche porte.</p>
+        <form action="/search" method="GET" class="row g-2 mb-4">
+            <div class="col-md-6 col-xs-12">
+                <label for="firstname">Prénom :</label>
+                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="John" value="{{ firstname }}">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="lastname">Nom :</label>
+                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Doe" value="{{ lastname }}">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="email">Adresse email :</label>
+                <input type="email" class="form-control"  name="email" id="email" placeholder="name@example.com" value="{{ email }}">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="phone">Téléphone :</label>
+                <input type="text" class="form-control"  name="phone" id="phone" placeholder="0611223344" value="{{ phone }}">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8 col-xs-12">
+        <div class="card-columns">
+            {% for user in users %}
+                <div class="card">
+                    {% if user.picture %}
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user.firstname }} {{ user.lastname }}</h5>
+                        {% if user.description %}
+                        <p class="card-text">
+                            {{ user.description }}
+                        </p>
+                        {% endif %}
 
+                        <p class="card-text">
+                            <small><i class="fas fa-paper-plane m-1"></i> <a href="mailto:{{ user.email }}">{{ user.email }}</a></small>
+                        </p>
+                        
+                        {% if user.phone %}
+                        <p class="card-text">
+                            <i class="fas fa-phone-square-alt m-1"></i> {{ user.phone }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}
