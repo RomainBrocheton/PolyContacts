@@ -32,6 +32,7 @@
                     Accueil
                   </a>
                 </li>
+                {% if auth == 0 %}
                 <li>
                   <a href="/connexion" class="nav-link text-white text-center">
                     <i class="fas fa-sign-in-alt d-block mx-auto mb-1"></i>
@@ -44,6 +45,15 @@
                     Inscription
                   </a>
                 </li>
+                {% endif %}
+                {% if auth > 0 %}
+                <li>
+                    <a href="/logout" class="nav-link text-white text-center">
+                        <i class="fas fa-sign-out-alt d-block mx-auto mb-1"></i>
+                      Déconnexion
+                    </a>
+                </li>
+                {% endif %}
               </ul>
             </div>
           </div>

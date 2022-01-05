@@ -1,8 +1,12 @@
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import logging as lg
 import enum
+import bcrypt
 
-from .views import app
+app = Flask(__name__)
+app.config.from_object('config')
+
 # Create database connection object
 db = SQLAlchemy(app)
 
@@ -30,13 +34,13 @@ class User(db.Model):
         self.password = password
         self.role = role
 
+
 def init_db():
     db.drop_all()
     db.create_all()
 
     # Seeding
-    db.session.add(User("Admin", "Admin", "admin@admin", "password", Role['admin']))
-    db.session.add(User("John", "Doe", "john.doe@example.com", "password"))
+    hashed = bcrypt.hashpw(b"password", bcrypt.gensalt())
+    db.session.add(User("Admin", "Admin", "admin@admin", hashed, Role['admin']))
+    db.session.add(User("John", "Doe", "john.doe@example.com", hashed))
     db.session.commit()
-
-    lg.info('Database initialized!')
