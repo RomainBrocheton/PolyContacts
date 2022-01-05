@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+        <h2>Mon profil</h2>
+
+        <p>Remplissez votre profil grâce au formulaire ci-dessous.</p>
+        <form action="/profile/" method="POST" class="row g-2 mb-4" enctype="multipart/form-data">
+            <div class="col-md-6 col-xs-12">
+                <label for="firstname">Prénom :</label>
+                <input type="text" class="form-control" name="firstname" id="firstname" placeholder="John" value="{{ user.firstname }}">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="lastname">Nom :</label>
+                <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Doe" value="{{ user.lastname }}">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="email">Adresse email :</label>
+                <input type="email" class="form-control"  name="email" id="email" placeholder="name@example.com" value="{{ user.email }}">
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <label for="phone">Téléphone :</label>
+                <input type="text" class="form-control"  name="phone" id="phone" placeholder="0611223344" value="{{ user.phone }}">
+            </div>
+            <div class="col-12">
+                <label for="description">Description :</label>
+                <textarea name="description" id="description" rows="3" class="form-control" placeholder="Hey..">{{ user.description }}</textarea>
+            </div>
+            <div class="col-12">
+                <label for="picture">Photo :</label>
+                <input type="file" name="picture" id="picture" accept="image/*" class="form-control">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

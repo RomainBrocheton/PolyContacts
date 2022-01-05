@@ -74,6 +74,23 @@ def search():
     users = list(dict.fromkeys(users))
     return render_template('app.html', auth=auth, users = users, email = request.args.get('email'), firstname = request.args.get('firstname'), lastname = request.args.get('lastname'), phone = request.args.get('phone') )
 
+@app.route('/profile/', methods=['GET', 'POST'])
+def profile():
+    global auth
+    if auth == 0:
+        return redirect("../connexion/")
+
+    user = User.query.filter(User.id == auth).first()
+
+    if request.method == "POST":    # BUG update not working
+        user.firstname = request.form.get("firstname")
+        user.lastname = request.form.get("lastname")
+        user.email = request.form.get("email")
+        user.phone = request.form.get("phone")
+        user.description = request.form.get("description")
+        db.session.commit() # BUG ??
+
+    return render_template('profile.html', auth=auth, user=user)
 
 if __name__ == "__main__":
     app.run()
