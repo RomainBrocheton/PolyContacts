@@ -27,20 +27,21 @@ class User(db.Model):
 
     role = db.Column(db.Enum(Role), nullable=False, default=Role['user'])
 
-    def __init__(self, firstname, lastname, email, password, role = Role['user']):
+    """ def __init__(self, firstname, lastname, email, password, role = Role['user']):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.password = password
-        self.role = role
+        self.role = role """
 
 
 def init_db():
+    print("init_db")
     db.drop_all()
     db.create_all()
 
     # Seeding
     hashed = bcrypt.hashpw(b"password", bcrypt.gensalt())
-    db.session.add(User("Admin", "Admin", "admin@admin", hashed, Role['admin']))
-    db.session.add(User("John", "Doe", "john.doe@example.com", hashed))
+    db.session.add(User(firstname="Admin", lastname="Admin", email="admin@admin", password=hashed, role=Role['admin']))
+    db.session.add(User(firstname="John", lastname="Doe", email="john@doe", password=hashed))
     db.session.commit()

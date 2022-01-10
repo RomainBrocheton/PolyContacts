@@ -26,13 +26,13 @@
               </a>
 
               <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                {% if auth == 0 %}
                 <li>
                   <a href="/" class="nav-link text-white text-center">
                     <i class="fas fa-home d-block mx-auto mb-1"></i>
                     Accueil
                   </a>
                 </li>
-                {% if auth == 0 %}
                 <li>
                   <a href="/connexion" class="nav-link text-white text-center">
                     <i class="fas fa-sign-in-alt d-block mx-auto mb-1"></i>
@@ -48,15 +48,21 @@
                 {% endif %}
                 {% if auth > 0 %}
                 <li>
+                  <a href="/dashboard" class="nav-link text-white text-center">
+                      <i class="fas fa-home d-block mx-auto mb-1"></i>
+                      Annuaire
+                  </a>
+                </li>
+                <li>
                   <a href="/profile" class="nav-link text-white text-center">
                       <i class="fas fa-user d-block mx-auto mb-1"></i>
-                    Mon profil
+                      Mon profil
                   </a>
                 </li>
                 <li>
                     <a href="/logout" class="nav-link text-white text-center">
                         <i class="fas fa-sign-out-alt d-block mx-auto mb-1"></i>
-                      Déconnexion
+                        Déconnexion
                     </a>
                 </li>
                 {% endif %}

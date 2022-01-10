@@ -13,6 +13,7 @@ auth = 0
 def index():
     return render_template('index.html', auth=auth)
 
+
 @app.route('/inscription/', methods=['GET', 'POST'])
 def inscription():
     if request.method == 'POST':
@@ -21,6 +22,7 @@ def inscription():
         db.session.commit()
 
     return render_template('inscription.html',auth=auth)
+
 
 @app.route('/connexion/', methods=['GET', 'POST'])
 def connexion():
@@ -59,6 +61,7 @@ def dashboard():
     users = User.query.all()
     return render_template('app.html', auth=auth, users = users)
 
+
 @app.route('/search')
 def search():
     global auth
@@ -74,23 +77,35 @@ def search():
     users = list(dict.fromkeys(users))
     return render_template('app.html', auth=auth, users = users, email = request.args.get('email'), firstname = request.args.get('firstname'), lastname = request.args.get('lastname'), phone = request.args.get('phone') )
 
+
 @app.route('/profile/', methods=['GET', 'POST'])
 def profile():
     global auth
     if auth == 0:
         return redirect("../connexion/")
 
-    user = User.query.filter(User.id == auth).first()
+    db.session.flush()
+    user = User.query.get(auth)
+    print(type(user))
+    print("[DEBUG] before : ", user.firstname)
 
     if request.method == "POST":    # BUG update not working
-        user.firstname = request.form.get("firstname")
+        user.firstname = "test"
+       #user.firstname = request.form.get("firstname")
         user.lastname = request.form.get("lastname")
         user.email = request.form.get("email")
         user.phone = request.form.get("phone")
         user.description = request.form.get("description")
-        db.session.commit() # BUG ??
 
+        print(db.session.dirty)
+        print(db.session.commit())
+        print(db.session.dirty)
+
+        print("[DEBUG] after : ", user.firstname)
+
+    user = User.query.get(auth)
     return render_template('profile.html', auth=auth, user=user)
+
 
 if __name__ == "__main__":
     app.run()
