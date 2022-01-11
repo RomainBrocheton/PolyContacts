@@ -34,7 +34,7 @@
             {% for user in users %}
                 <div class="card">
                     {% if user.picture %}
-                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <img class="card-img-top" src="{{ user.picture }}" alt="Card image cap">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ user.firstname }} {{ user.lastname }}</h5>

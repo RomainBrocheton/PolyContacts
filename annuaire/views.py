@@ -1,12 +1,21 @@
 from flask import Flask, render_template, request, redirect
-from flask_sqlalchemy import SQLAlchemy
 from .models import *
 import bcrypt
+from .base import Session
+from sqlalchemy import update
+from imgurpython import ImgurClient
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 app.config.from_object('config')
 
-db = SQLAlchemy(app)
+Base.metadata.create_all(engine)
+session = Session()
+
+client = ImgurClient(app.config['IMGUR_ID'], app.config['IMGUR_PK'])
+UPLOAD_FOLDER = '\\annuaire\\static\\img\\'
+
 auth = 0
 
 @app.route('/')
@@ -18,7 +27,7 @@ def index():
 def inscription():
     if request.method == 'POST':
         hashed = bcrypt.hashpw(request.form.get('password').encode(), bcrypt.gensalt())
-        db.session.add(User(request.form.get('firstname'), request.form.get('lastname'), request.form.get('email'), hashed))
+        db.session.add(User(firstname=request.form.get('firstname'), lastname=request.form.get('lastname'), email=request.form.get('email'), password=hashed))
         db.session.commit()
 
     return render_template('inscription.html',auth=auth)
@@ -31,7 +40,7 @@ def connexion():
         return redirect("../dashboard/")
 
     if request.method == 'POST':
-        user = User.query.filter(User.email == request.form.get('email')).first()
+        user = session.query(User).filter(User.email == request.form.get('email')).first()
 
         if user is None:
             return render_template('connexion.html',auth=auth)
@@ -58,7 +67,8 @@ def dashboard():
     if auth == 0:
         return redirect("../connexion/")
 
-    users = User.query.all()
+    session.flush()
+    users = session.query(User).all()
     return render_template('app.html', auth=auth, users = users)
 
 
@@ -68,13 +78,14 @@ def search():
     if auth == 0:
         return redirect("../connexion/")
 
-    users1 = User.query.filter(User.email == request.args.get('email')).all()
-    users2 = User.query.filter(User.firstname == request.args.get('firstname')).all()
-    users3 = User.query.filter(User.lastname == request.args.get('lastname')).all()
-    users4 = User.query.filter(User.phone == request.args.get('phone')).all()
+    users1 = session.query(User).filter(User.email == request.form.get('email')).all()
+    users2 = session.query(User).filter(User.firstname == request.args.get('firstname')).all()
+    users3 = session.query(User).filter(User.lastname == request.args.get('lastname')).all()
+    users4 = session.query(User).filter(User.phone == request.args.get('phone')).all()
 
     users = users1 + users2 + users3 + users4
     users = list(dict.fromkeys(users))
+    
     return render_template('app.html', auth=auth, users = users, email = request.args.get('email'), firstname = request.args.get('firstname'), lastname = request.args.get('lastname'), phone = request.args.get('phone') )
 
 
@@ -84,26 +95,36 @@ def profile():
     if auth == 0:
         return redirect("../connexion/")
 
-    db.session.flush()
-    user = User.query.get(auth)
+    user = session.query(User).filter(User.id == auth).first()
+    
     print(type(user))
     print("[DEBUG] before : ", user.firstname)
 
-    if request.method == "POST":    # BUG update not working
-        user.firstname = "test"
-       #user.firstname = request.form.get("firstname")
-        user.lastname = request.form.get("lastname")
-        user.email = request.form.get("email")
-        user.phone = request.form.get("phone")
-        user.description = request.form.get("description")
+    if request.method == "POST":
+        
+        file = request.files['picture']
+        picture = None
 
-        print(db.session.dirty)
-        print(db.session.commit())
-        print(db.session.dirty)
+        if file:
+            filename = secure_filename(file.filename)
+            path = os.getcwd() + UPLOAD_FOLDER + filename
+            file.save(path)
+            image = client.upload_from_path(path)
+            picture = image['link']
 
-        print("[DEBUG] after : ", user.firstname)
+        print(picture)
 
-    user = User.query.get(auth)
+        conn = engine.connect()
+        stmt = (
+            update(User).
+            where(User.id == auth).
+            values(firstname=request.form.get('firstname'), lastname=request.form.get('lastname'), email=request.form.get('email'), phone=request.form.get('phone'), description=request.form.get('description'), picture=picture)
+        )
+        conn.execute(stmt)
+
+        print("[DEBUG]  ", stmt)
+
+    user = session.query(User).filter(User.id == auth).first()
     return render_template('profile.html', auth=auth, user=user)
 
 
