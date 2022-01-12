@@ -67,7 +67,6 @@ def dashboard():
     if auth == 0:
         return redirect("../connexion/")
 
-    session.flush()
     users = session.query(User).all()
     return render_template('app.html', auth=auth, users = users)
 
@@ -101,10 +100,10 @@ def profile():
     print("[DEBUG] before : ", user.firstname)
 
     if request.method == "POST":
-        
-        file = request.files['picture']
-        picture = None
+        session.flush()
+        conn = engine.connect()
 
+        file = request.files['picture']
         if file:
             filename = secure_filename(file.filename)
             path = os.getcwd() + UPLOAD_FOLDER + filename
@@ -112,16 +111,20 @@ def profile():
             image = client.upload_from_path(path)
             picture = image['link']
 
-        print(picture)
+            stmt = (
+                update(User).
+                where(User.id == auth).
+                values(firstname=request.form.get('firstname'), lastname=request.form.get('lastname'), email=request.form.get('email'), phone=request.form.get('phone'), description=request.form.get('description'), picture=picture)
+            )
+        else:
+            stmt = (
+                update(User).
+                where(User.id == auth).
+                values(firstname=request.form.get('firstname'), lastname=request.form.get('lastname'), email=request.form.get('email'), phone=request.form.get('phone'), description=request.form.get('description'))
+            )
 
-        conn = engine.connect()
-        stmt = (
-            update(User).
-            where(User.id == auth).
-            values(firstname=request.form.get('firstname'), lastname=request.form.get('lastname'), email=request.form.get('email'), phone=request.form.get('phone'), description=request.form.get('description'), picture=picture)
-        )
         conn.execute(stmt)
-
+        session.commit()
         print("[DEBUG]  ", stmt)
 
     user = session.query(User).filter(User.id == auth).first()

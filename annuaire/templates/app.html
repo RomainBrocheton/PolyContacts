@@ -26,6 +26,7 @@
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Rechercher</button>
+                <a href="dashboard" class="btn btn-secondary">Effacer la recherche</a>
             </div>
         </form>
     </div>
@@ -33,12 +34,12 @@
         <div class="card-columns">
             {% for user in users %}
                 <div class="card">
-                    {% if user.picture %}
-                    <img class="card-img-top" src="{{ user.picture }}" alt="Card image cap">
+                    {% if user.picture  %}
+                    <img class="card-img-top" src="{{ user.picture }}" alt="Card image">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ user.firstname }} {{ user.lastname }}</h5>
-                        {% if user.description %}
+                        {% if user.description and user.description != "None" %}
                         <p class="card-text">
                             {{ user.description }}
                         </p>
@@ -48,7 +49,7 @@
                             <small><i class="fas fa-paper-plane m-1"></i> <a href="mailto:{{ user.email }}">{{ user.email }}</a></small>
                         </p>
                         
-                        {% if user.phone %}
+                        {% if user.phone and user.phone != "None" %}
                         <p class="card-text">
                             <i class="fas fa-phone-square-alt m-1"></i> {{ user.phone }}
                         </p>

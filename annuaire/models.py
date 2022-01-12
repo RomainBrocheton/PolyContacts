@@ -29,7 +29,7 @@ class User(Base):
 
 def init_db():
     print("init_db")
-    seed = False
+    seed = True
 
     # Create table
     Base.metadata.create_all(engine)
