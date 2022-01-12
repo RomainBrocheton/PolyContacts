@@ -1,0 +1,6 @@
+flask
+sqlalchemy
+bcrypt
+imgurpython
+werkzeug
+mysqlclient 

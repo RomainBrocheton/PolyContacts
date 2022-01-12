@@ -1,7 +1,6 @@
 from flask import Flask
 from sqlalchemy import Column, String, Integer
 from .base import Session, engine, Base
-import logging as lg
 import bcrypt
 
 app = Flask(__name__)
