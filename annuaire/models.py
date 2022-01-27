@@ -6,7 +6,13 @@ import bcrypt
 app = Flask(__name__)
 app.config.from_object('config')
 
-Base.metadata.create_all(engine)
+while True:
+    try:
+        Base.metadata.create_all(engine)
+    except:
+        continue
+    break
+
 session = Session()
 
 class User(Base):
@@ -27,11 +33,16 @@ class User(Base):
 
 
 def init_db():
-    print("init_db")
+    print("Init : STARTING")
     seed = True
 
     # Create table
-    Base.metadata.create_all(engine)
+    while True:
+        try:
+            Base.metadata.create_all(engine)
+        except:
+            continue
+        break
 
     if seed:
         session.execute('TRUNCATE TABLE users')
@@ -43,3 +54,5 @@ def init_db():
         session.add(User(firstname="John", lastname="Doe", email="john@doe", password=hashed))
         session.commit()
         session.close()
+
+    print('Init : OK')

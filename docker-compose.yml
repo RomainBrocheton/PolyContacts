@@ -13,6 +13,7 @@ services:
       - "27017:3306"
     volumes:
       - dbdata:/var/lib/mysql
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: pma
@@ -25,5 +26,13 @@ services:
     restart: always
     ports:
       - 8081:80
+
+  webapp:
+    build: .
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+
 volumes:
   dbdata:

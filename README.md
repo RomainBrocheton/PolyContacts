@@ -42,3 +42,19 @@ Nous avons pris la liberté d'installer également le service PhpMyAdmin grâce 
 
 ### Application
 L'application est accessible à l'adresse [http://localhost:5000](http://localhost:5000).
+
+### Dockerfile
+#### Build
+Pour construire le container, exécutez cette commande :
+```
+docker build --tag annuaire-docker .
+docker tag annuaire-docker:latest annuaire-docker:v1.0.0
+```
+
+#### Lancement
+Pour lancer le container, exécuter cette commande :
+```
+docker run --publish 5000:5000 annuaire-docker
+```
+
+Le site sera accessible à l'adresse [http://localhost:5000](http://localhost:5000).

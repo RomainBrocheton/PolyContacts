@@ -8,6 +8,12 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 # Connect sqlalchemy to app
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+while True:
+    try:
+        engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    except:
+        continue
+    break
+
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
