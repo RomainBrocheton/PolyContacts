@@ -2,18 +2,17 @@
 
 FROM ubuntu:20.04
 
-RUN apt-get update -y && \
-    apt-get install -y python3-pip python-dev
+RUN apt-get update -y
+RUN apt-get install -y python3-pip python3-dev default-libmysqlclient-dev build-essential
 
-WORKDIR /
-
-COPY requirements.txt requirements.txt
-
-RUN pip install -r requirements.txt
-
-EXPOSE 5000
+WORKDIR /app
 
 COPY . .
 
-# ENTRYPOINT [ "python" ]
-CMD [ "python", "run.py" ]
+RUN pip install -r requirements.txt
+RUN pip3 install mysqlclient
+
+EXPOSE 5000
+
+ENTRYPOINT [ "python3" ]
+CMD [ "run.py" ]

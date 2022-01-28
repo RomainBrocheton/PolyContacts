@@ -6,27 +6,10 @@
 ## Description
 Un annuaire en Flask.  
 
-
-## Installation
-### Base de données
-Nous utilisons un serveur MySQL pour l'application. Docker nous permet de lancer ce service via la commande suivante :  
-```
-docker-compose up
-```
-
-### Flask
-PolyContacts a été créée en Flask. Pour pouvoir lancer l'application, il est nécessaire d'installer certains packages Python :  
-```
-pip install flask
-pip install flask_sqlalchemy
-pip install mysql-python
-pip install mysqlclient
-```
-
 ## Lancement
 PolyContacts peut être lancé via la commande suivante :
 ```
-python run.py
+docker compose up --build
 ```
 
 ## Utilisation
@@ -42,19 +25,3 @@ Nous avons pris la liberté d'installer également le service PhpMyAdmin grâce 
 
 ### Application
 L'application est accessible à l'adresse [http://localhost:5000](http://localhost:5000).
-
-### Dockerfile
-#### Build
-Pour construire le container, exécutez cette commande :
-```
-docker build --tag annuaire-docker .
-docker tag annuaire-docker:latest annuaire-docker:v1.0.0
-```
-
-#### Lancement
-Pour lancer le container, exécuter cette commande :
-```
-docker run --publish 5000:5000 annuaire-docker
-```
-
-Le site sera accessible à l'adresse [http://localhost:5000](http://localhost:5000).

@@ -27,8 +27,8 @@ def index():
 def inscription():
     if request.method == 'POST':
         hashed = bcrypt.hashpw(request.form.get('password').encode(), bcrypt.gensalt())
-        db.session.add(User(firstname=request.form.get('firstname'), lastname=request.form.get('lastname'), email=request.form.get('email'), password=hashed))
-        db.session.commit()
+        session.add(User(firstname=request.form.get('firstname'), lastname=request.form.get('lastname'), email=request.form.get('email'), password=hashed))
+        session.commit()
 
     return render_template('inscription.html',auth=auth)
 
