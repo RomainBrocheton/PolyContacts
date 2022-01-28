@@ -9,7 +9,11 @@ Un annuaire en Flask.
 ## Lancement
 PolyContacts peut être lancé via la commande suivante :
 ```
+# La première fois
 docker compose up --build
+
+# Les fois suivantes
+docker compose up
 ```
 
 ## Utilisation
